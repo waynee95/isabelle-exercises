@@ -115,6 +115,40 @@ lemma "sum_tree t = sum_list (contents t)"
   apply (auto)
   done
 
-(* TODO: 2.7 *)
+(* Exercise 2.7 *)
+datatype 'a tree2 = Leaf 'a | Node "'a tree2" 'a "'a tree2"
+
+fun mirror :: "'a tree2 \<Rightarrow> 'a tree2" where
+"mirror (Leaf x) = Leaf x" |
+"mirror (Node t1 x t2) = Node (mirror t2) x (mirror t1)"
+
+fun pre_order :: "'a tree2 \<Rightarrow> 'a list" where
+"pre_order (Leaf x) = [x]" |
+"pre_order (Node t1 x t2) = x # pre_order t1 @ pre_order t2"
+
+fun post_order :: "'a tree2 \<Rightarrow> 'a list" where
+"post_order (Leaf x) = [x]" |
+"post_order (Node t1 x t2) = post_order t1 @ post_order t2 @ [x]"
+
+lemma "pre_order (mirror t) = rev (post_order t)"
+  apply (induction t)
+  apply (auto)
+  done
+
+(* Exercise 2.8 *)
+fun intersperse :: "'a \<Rightarrow> 'a list \<Rightarrow> 'a list" where
+"intersperse x [] = []" |
+"intersperse x (y # ys) = [y, x] @ intersperse x ys"
+
+value "intersperse a [a,b,c]"
+value "intersperse 1 [1,2,3] :: int list"
+
+lemma "map f (intersperse a xs) = intersperse (f a) (map f xs)"
+  apply (induction xs)
+  apply (auto)
+  done
+
+(* Exercise 2.9 *)
+(* TODO *)
 
 end
