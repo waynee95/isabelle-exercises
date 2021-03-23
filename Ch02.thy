@@ -158,4 +158,37 @@ lemma "itadd m n = add m n"
   apply (auto)
   done
 
+(* Exercise 2.10 *)
+datatype tree0 = Tip | Node tree0 tree0
+
+fun nodes :: "tree0 \<Rightarrow> nat" where
+"nodes Tip = 1" |
+"nodes (Node t1 t2) = 1 + (nodes t1) + (nodes t2)"
+
+fun explode :: "nat \<Rightarrow> tree0 \<Rightarrow> tree0" where
+"explode 0 t = t" |
+"explode (Suc n) t = explode n (Node t t)"
+
+(* Exercise 2.11 *)
+datatype exp = Var | Const int | Add exp exp | Mult exp exp
+
+fun eval :: "exp \<Rightarrow> int \<Rightarrow> int" where
+"eval Var n = n" |
+"eval (Const c) _ = c" |
+"eval (Add l r) n = (eval l n) + (eval r n)" |
+"eval (Mult l r) n = (eval l n) * (eval r n)"
+
+value "eval (Add (Mult (Const 2) Var) (Const 3)) i"
+
+fun evalp :: "int list \<Rightarrow> int \<Rightarrow> int" where
+"evalp [] _ = 0" |
+"evalp [a0] _ = a0" |
+"evalp (ai # as) x = ai + x * (evalp as x)"
+
+value "evalp [4,2,-1,3] 2"
+
+(* TODO: fun coeffs :: "exp \<Rightarrow> int list" *)
+
+(* TODO: theorem evalp_coeffs: "evalp (coeffs e) x = eval e x" *)
+
 end
